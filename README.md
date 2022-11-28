@@ -30,6 +30,39 @@
 - [Aria2 Pro](https://github.com/P3TERX/docker-aria2-pro) (Docker)
 - [Aria2 一键安装管理脚本 增强版](https://github.com/P3TERX/aria2.sh) (GNU/Linux)
 
+* 安装和配置 Rclone
+RCLONE 官方提供了一键安装脚本：
+```
+wget -N git.io/aria2.sh && chmod +x aria2.sh
+```
+安装完后，输入 rclone config 命令进入交互式配置选项，按照提示一步一步来进行操作即可。如果你一脸懵逼，可以去看《Rclone 安装配置教程》来了解配置的详细过程。
+
+*配置自动上传脚本
+Aria2 一键安装管理脚本 增强版 整合了 Aria2 完美配置 ，安装后会附带一些附加功能脚本功能脚本，RCLONE 自动上传脚本就是其中之一。由于默认不启用，所以需要手动启用。
+> **NOTICE:** 本项目的上传脚本使用更稳定快速的原生命令上传方式，而非处在测试阶段的挂载方式，这点和一般的脚本不同。
+  *输入`nano /root/.aria2c/aria2.conf`打开 Aria2 配置文件进行修改。或使用Aria2 一键安装管理脚本 增强版中的手动修改选项打开配置文件进行修改。找到“下载完成后执行的命令”，把`clean.sh`替换为`upload.sh`。
+```
+# 下载完成后执行的命令
+on-download-complete=/root/.aria2c/upload.sh
+```
+*输入nano /root/.aria2c/script.conf打开附加功能脚本配置文件进行修改，有中文注释，按照自己的实际情况进行修改，第一次使用只建议修改网盘名称。
+```
+# 网盘名称(RCLONE 配置时填写的 name)
+drive-name=OneDrive
+```
+*重启 Aria2 。脚本选项重启或者执行以下命令：
+```
+service aria2 restart
+```
+*检查配置是否成功
+*执行upload.sh脚本，提示success即代上传脚本能正常被调用，否则请检查与 RCLONE 有关的配置。
+```
+/root/.aria2c/upload.sh
+```
+*打开实时日志并下载任意文件，出现上传成功信息即代表配置成功，否则请认真阅读教程并重新开始。
+*检查网盘是否存在相关文件，若不存在说明你搞错网盘了。
+
+
 ## 进阶玩法
 
 * [OneDrive、Google Drive 等网盘离线下载](https://p3terx.com/archives/offline-download-of-onedrive-gdrive.html)
